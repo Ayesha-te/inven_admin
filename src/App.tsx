@@ -182,9 +182,18 @@ function App() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      const data = contentType.includes('application/json') ? await response.json() : await response.text();
       if (!response.ok) {
-        throw new Error(data?.detail || data?.error || data?.message || JSON.stringify(data));
+        const message =
+          typeof data === 'string'
+            ? data
+            : data?.detail || data?.error || data?.message || JSON.stringify(data);
+        throw new Error(message || `Login failed with ${response.status}`);
+      }
+
+      if (typeof data === 'string') {
+        throw new Error('The server returned an unexpected response format during login.');
       }
 
       const loggedInUser: AuthUser | undefined = data?.user;
