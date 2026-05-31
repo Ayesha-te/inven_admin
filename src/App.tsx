@@ -73,11 +73,11 @@ const statusClassMap: Record<ApprovalStatus, string> = {
 
 const subscriptionPlanLabelMap: Record<string, string> = {
   FREE: 'Basic',
-  STARTER: 'Basic',
   BASIC: 'Basic',
+  STARTER: 'Starter',
+  PRO: 'Pro',
   STANDARD: 'Starter',
   PREMIUM: 'Pro',
-  PRO: 'Pro',
   OTHER: 'Pro',
 };
 
