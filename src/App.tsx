@@ -71,6 +71,21 @@ const statusClassMap: Record<ApprovalStatus, string> = {
   REJECTED: 'status status-rejected',
 };
 
+const subscriptionPlanLabelMap: Record<string, string> = {
+  FREE: 'Basic',
+  STARTER: 'Basic',
+  BASIC: 'Basic',
+  STANDARD: 'Starter',
+  PREMIUM: 'Pro',
+  PRO: 'Pro',
+  OTHER: 'Pro',
+};
+
+const getSubscriptionPlanLabel = (plan?: string | null) => {
+  const normalized = String(plan || '').toUpperCase();
+  return subscriptionPlanLabelMap[normalized] || String(plan || 'Basic');
+};
+
 function App() {
   const [token, setToken] = useState<string>(() => localStorage.getItem(TOKEN_KEY) || '');
   const [adminUser, setAdminUser] = useState<AuthUser | null>(() => {
@@ -152,6 +167,7 @@ function App() {
         user.email,
         user.company_name,
         user.subscription_plan,
+        getSubscriptionPlanLabel(user.subscription_plan),
         ...user.stores.map((store) => store.name),
       ].filter(Boolean).join(' ').toLowerCase();
 
@@ -394,7 +410,7 @@ function App() {
                 <div className="detail-grid">
                   <DetailItem label="Company" value={user.company_name || 'Not provided'} />
                   <DetailItem label="Phone" value={user.phone || 'Not provided'} />
-                  <DetailItem label="Plan" value={user.subscription_plan} />
+                  <DetailItem label="Plan" value={getSubscriptionPlanLabel(user.subscription_plan)} />
                   <DetailItem label="Subscription Status" value={user.subscription_status_text} />
                   <DetailItem label="Registered" value={new Date(user.registration_date).toLocaleDateString()} />
                   <DetailItem label="Approved By" value={user.approved_by_name || 'Not approved yet'} />
